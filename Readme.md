@@ -1,5 +1,5 @@
  
-# SELCOM API CLIENT
+# Selcom API Gateway Client - JAVA
 
 <p align='center'>
 <img src="https://img.shields.io/badge/java-100%25-green">
