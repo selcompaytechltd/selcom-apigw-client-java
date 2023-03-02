@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Base64;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import org.json.simple.JSONObject;
 import org.apache.http.client.methods.*;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -18,7 +17,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.json.simple.parser.JSONParser;
+import com.google.gson.*;
 
 public class ApigwClient 
 {
@@ -32,7 +31,7 @@ public class ApigwClient
         this.apiSecret = apiSecret;
 
     }
-    public  Map<String,Object> computeHeader( JSONObject dataMap) {
+    public  Map<String,Object> computeHeader( JsonObject dataMap) {
         Map<String,Object> header = new HashMap<>();
         String encodekey = Base64.getEncoder().encodeToString((apiKey).getBytes());
         String authToken = "SELCOM "+ encodekey;
@@ -48,7 +47,7 @@ public class ApigwClient
     
         for (Object key : dataMap.keySet()) {
             String keyStr = (String)key;
-            String keyvalue = dataMap.get(keyStr).toString();
+            String keyvalue = dataMap.get(keyStr).getAsString();
             serializedJson.add(keyStr+"="+keyvalue);
             keys.add(keyStr);
     
@@ -82,14 +81,15 @@ public class ApigwClient
     
     }
     
-    public  JSONObject postFunc(String path, JSONObject jsonData){
+    public  JsonObject postFunc(String path, JsonObject jsonData){
         Map <String,Object> header = computeHeader(jsonData);
         String url = this.baseUrl + path;
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
 
         try {
+            Gson gson = new Gson();
             HttpPost request = new HttpPost(url);
-            StringEntity params = new StringEntity(jsonData.toString());
+            StringEntity params = new StringEntity( jsonData.toString());
 
             for (Object key : header.keySet()) {
                 request.addHeader(key.toString(), header.get(key).toString());
@@ -100,23 +100,24 @@ public class ApigwClient
 
             HttpEntity httpEntity = hresp.getEntity();
             String apiOutput = EntityUtils.toString(httpEntity);
-            JSONParser parser = new JSONParser();
+            
 
-            return (JSONObject)parser.parse(apiOutput);
+            return new Gson().fromJson(apiOutput, JsonObject.class);
         } catch (Exception ex) {
-            JSONObject err = new JSONObject();
-            err.put("error", ex.getMessage());
+            JsonObject err = new JsonObject();
+            err.addProperty("error", ex.getMessage());
             return err;
         } 
     }
 
-    public  JSONObject getFunc(String path, JSONObject jsonData){
+    public  JsonObject getFunc(String path, JsonObject jsonData){
         Map<String, Object> header = computeHeader(jsonData);
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         List<String> qstring_list = new ArrayList<String>();
-
-        for (Object key : jsonData.keySet()) {
-            qstring_list.add(key.toString() + "="+jsonData.get(key).toString());
+        
+        for (String key : jsonData.keySet()) {
+            qstring_list.add(key.toString() + "="+jsonData.get(key).getAsString());
+            
         }
 
         try {
@@ -132,26 +133,25 @@ public class ApigwClient
             HttpEntity httpEntity = hresp.getEntity();
             String apiOutput = EntityUtils.toString(httpEntity);
         
-            JSONParser parser = new JSONParser();
+            
 
-            return (JSONObject)parser.parse(apiOutput);
-
+            return new Gson().fromJson(apiOutput, JsonObject.class);
         } catch (Exception ex) {
-            JSONObject err = new JSONObject();
-            err.put("error", ex.getMessage());
+            JsonObject err = new JsonObject();
+            err.addProperty("error", ex.getMessage());
             return err;
-        } 
+        }  
   
 
     }
 
-    public JSONObject deleteFunc(String path, JSONObject jsonData){
+    public JsonObject deleteFunc(String path, JsonObject jsonData){
         Map<String,Object> header = computeHeader(jsonData);
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         List<String> qstring_list = new ArrayList<String>();
 
-        for (Object key : jsonData.keySet()) {
-            qstring_list.add(key.toString() + "="+jsonData.get(key).toString());
+        for (String key : jsonData.keySet()) {
+            qstring_list.add(key.toString() + "="+jsonData.get(key).getAsString());
         }
 
         try {
@@ -166,13 +166,10 @@ public class ApigwClient
 
             HttpEntity httpEntity = hresp.getEntity();
             String apiOutput = EntityUtils.toString(httpEntity);
-            JSONParser parser = new JSONParser();
-
-            return (JSONObject)parser.parse(apiOutput);
-
+            return new Gson().fromJson(apiOutput, JsonObject.class);
         } catch (Exception ex) {
-            JSONObject err = new JSONObject();
-            err.put("error", ex.getMessage());
+            JsonObject err = new JsonObject();
+            err.addProperty("error", ex.getMessage());
             return err;
         } 
 
@@ -181,6 +178,6 @@ public class ApigwClient
 
     }
     public static void main(String[] args){
-        
+
     };
 }

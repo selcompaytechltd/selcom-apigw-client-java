@@ -5,7 +5,7 @@
 
   <groupId>io.github.selcompaytechltd</groupId>
   <artifactId>apigwClient</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.3</version>
  <packaging>jar</packaging>
 
    <name>app</name>
@@ -32,7 +32,7 @@
   <connection>scm:git:git://github.com/selcompaytechltd/selcom-apigw-client-java.git</connection>
   <developerConnection>scm:git:ssh://github.com/selcompaytechltd/selcom-apigw-client-java.git</developerConnection>
   <url>https://github.com/selcompaytechltd/selcom-apigw-client-java</url>
-   <tag>apigwClient-1.0.0</tag>
+   <tag>apigwClient-1.0.3</tag>
   </scm>
 
  <distributionManagement>
@@ -55,15 +55,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <version>1.1.1</version>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.10.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>

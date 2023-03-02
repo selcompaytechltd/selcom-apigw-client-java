@@ -1,5 +1,5 @@
  
-# SELCOM API CLIENT
+# Selcom API Gateway Client - JAVA
 
 <p align='center'>
 <img src="https://img.shields.io/badge/java-100%25-green">
@@ -53,8 +53,8 @@ client.deleteFunc(path, jsonData)
 ```java
 //import package
 import io.github.selcompaytechltd.ApigwClient;
-import org.json.simple.JSONObject;
 import java.util.Map;
+import com.google.gson.*;s
 
 String apiKey = '202cb962ac59075b964b07152d234b70';
 String apiSecret = '81dc9bdb52d04dc20036dbd8313ed055';
@@ -69,20 +69,20 @@ Client client = new ApigwClient(baseUrl,apiKey,apiSecret);
 String orderPath = "/v1/checkout/create-order-minimal";
 
 //order data
-JSONObject orderDict = new JSONObject();
-orderDict.put("vendor","VENDORTILL");
-orderDict.put("order_id","1218d00Y");
-orderDict.put("buyer_email", "john@example.com");
-orderDict.put("buyer_name", "John Joh");
-orderDict.put("buyer_phone", "255682555555");
-orderDict.put("amount",  8000);
-orderDict.put("currency","TZS");
-orderDict.put("buyer_remarks","None");
-orderDict.put("merchant_remarks","None");
-orderDict.put("no_of_items", 1 );
+JsonObject orderDict = new JsonObject();
+orderDict.addProperty("vendor","VENDORTILL");
+orderDict.addProperty("order_id","1218d00Y");
+orderDict.addProperty("buyer_email", "john@example.com");
+orderDict.addProperty("buyer_name", "John Joh");
+orderDict.addProperty("buyer_phone", "255682555555");
+orderDict.addProperty("amount",  8000);
+orderDict.addProperty("currency","TZS");
+orderDict.addProperty("buyer_remarks","None");
+orderDict.addProperty("merchant_remarks","None");
+orderDict.addProperty("no_of_items", 1 );
 
 //post data
-JSONObject response = client.postFunc(orderPath ,orderDict);
+JsonObject response = client.postFunc(orderPath ,orderDict);
 // print response
-System.out.println(reponse);
+System.out.println(response);
 ```
